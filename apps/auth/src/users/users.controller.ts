@@ -6,6 +6,8 @@ import {
   FindOneUserDto,
   PaginationDto,
   UpdateUserDto,
+  User,
+  Users,
   UsersServiceController,
   UsersServiceControllerMethods,
 } from '@app/common';
@@ -21,22 +23,25 @@ export class UsersController implements UsersServiceController {
     return this.usersService.create(createUserDto);
   }
 
-  findAllUsers() {
+  findAllUsers(): Users {
     return this.usersService.findAll();
   }
 
-  findOneUser(findOneUserDto: FindOneUserDto) {
+  findOneUser(findOneUserDto: FindOneUserDto): User {
     return this.usersService.findOne(findOneUserDto.id);
   }
 
-  updateUser(updateUserDto: UpdateUserDto) {
+  updateUser(updateUserDto: UpdateUserDto): User {
     return this.usersService.update(updateUserDto);
   }
 
-  removeUser({ id }: FindOneUserDto) {
+  removeUser({ id }: FindOneUserDto): User {
     return this.usersService.remove(id);
   }
-  queryUsers(paginationDtoStream: Observable<PaginationDto>) {
+
+  queryUsers(
+    paginationDtoStream: Observable<PaginationDto>,
+  ): Observable<Users> {
     return this.usersService.queryUsers(paginationDtoStream);
   }
 }

@@ -19,14 +19,12 @@ export class UsersService implements OnModuleInit {
       this.create({
         username: randomUUID(),
         password: randomUUID(),
-        age: 0,
       });
     }
   }
   create(createUserDto: CreateUserDto) {
     const user: User = {
       ...createUserDto,
-      subscribed: false,
       socialMedia: {},
       id: randomUUID(),
     };

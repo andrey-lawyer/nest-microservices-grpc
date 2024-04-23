@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package db;
+
+
+message CreateUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message GetOneUserRequest {
+  string id = 1;
+}
+
+message DeletetOneUserRequest {
+  string id = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  SocialMediaUser socialMediaUser = 2;
+}
+
+message PaginationUsersRequest {
+  int32 page = 1;
+  int32 skip = 2;
+}
+
+message GetAllUsersRequest {};
+
+message UsersAllResponse {
+  repeated UserResponse usersAll = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string username = 2;
+  string password = 3;
+  SocialMediaUser socialMediaUser = 6;
+}
+
+message SocialMediaUser {
+  optional string twitterUri = 1;
+  optional string fbUri = 2;
+}
+
+service DbService {
+  rpc CreateDbUser (CreateUserRequest) returns (UserResponse) {}
+  rpc GetAllUsers (GetAllUsersRequest) returns (UsersAllResponse) {}
+  rpc GetOneUser (GetOneUserRequest) returns (UserResponse) {}
+  rpc UpdateDbUser (UpdateUserRequest) returns (UserResponse) {}
+  rpc DeleteDbUser (DeletetOneUserRequest) returns (UserResponse) {}
+  rpc PaginationQueryUsers (stream PaginationUsersRequest) returns (stream UsersAllResponse) {}
+}
+
+
+

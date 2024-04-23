@@ -13,7 +13,12 @@ npm i --save @grpc/grpc-js @grpc/proto-loader
 
 npm i -S ts-proto
 
-protoc --plugin=./node_modules/.bin/protoc-gen_ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
+protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
+
+protoc --plugin=/c/Users/UNICEF/AppData/Roaming/npm/protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/
+auth.proto
+
+protoc --plugin=protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
 
 nest g lib common
 
@@ -35,3 +40,7 @@ nest g lib common
 "webpack": true,
 "tsConfigPath": "apps/client/tsconfig.app.json"
 },
+
+nest g resource users
+
+npm run start:dev auth

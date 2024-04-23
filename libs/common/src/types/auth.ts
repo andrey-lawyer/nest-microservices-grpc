@@ -28,15 +28,12 @@ export interface Users {
 export interface CreateUserDto {
   username: string;
   password: string;
-  age: number;
 }
 
 export interface User {
   id: string;
   username: string;
   password: string;
-  age: number;
-  subscribed: boolean;
   socialMedia: SocialMedia | undefined;
 }
 
