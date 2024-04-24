@@ -44,3 +44,5 @@ nest g lib common
 nest g resource users
 
 npm run start:dev auth
+npm run start:dev client
+npm run start:dev db

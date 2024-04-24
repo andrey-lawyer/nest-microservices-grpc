@@ -14,6 +14,7 @@ import { AUTH_SERVICE } from './constants';
         name: AUTH_SERVICE,
         transport: Transport.GRPC,
         options: {
+          url: 'localhost:5001',
           package: AUTH_PACKAGE_NAME,
           protoPath: join(__dirname, '../auth.proto'),
         },

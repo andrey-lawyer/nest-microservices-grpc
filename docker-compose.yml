@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres
+    volumes:
+      - ./apps/db/pgdata:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

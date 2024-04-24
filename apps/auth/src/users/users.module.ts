@@ -13,6 +13,7 @@ import { join } from 'path';
         name: DB_SERVICE,
         transport: Transport.GRPC,
         options: {
+          url: 'localhost:5002',
           package: db.DB_PACKAGE_NAME,
           protoPath: join(__dirname, '../db.proto'),
         },

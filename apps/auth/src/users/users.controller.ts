@@ -6,13 +6,12 @@ import {
   FindOneUserDto,
   PaginationDto,
   UpdateUserDto,
-  User,
   Users,
   UsersServiceController,
   UsersServiceControllerMethods,
 } from '@app/common';
 
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @Controller()
 @UsersServiceControllerMethods()
@@ -23,25 +22,39 @@ export class UsersController implements UsersServiceController {
     return this.usersService.create(createUserDto);
   }
 
-  findAllUsers(): Users {
-    return this.usersService.findAll();
+  async findAllUsers(): Promise<Users> {
+    const result$ = this.usersService.findAll();
+    const result = await lastValueFrom(result$);
+    return { users: result.usersAll };
   }
 
-  findOneUser(findOneUserDto: FindOneUserDto): User {
+  // async findOneUser(findOneUserDto: FindOneUserDto): Promise<User> {
+  //   const result$ = this.usersService.findOne(findOneUserDto.id);
+  //   const result = await lastValueFrom(result$);
+  //   return result;
+  // }
+
+  findOneUser(findOneUserDto: FindOneUserDto) {
     return this.usersService.findOne(findOneUserDto.id);
   }
 
-  updateUser(updateUserDto: UpdateUserDto): User {
+  updateUser(updateUserDto: UpdateUserDto) {
     return this.usersService.update(updateUserDto);
   }
 
-  removeUser({ id }: FindOneUserDto): User {
+  removeUser({ id }: FindOneUserDto) {
     return this.usersService.remove(id);
   }
 
   queryUsers(
     paginationDtoStream: Observable<PaginationDto>,
   ): Observable<Users> {
+    // const result = this.usersService
+    //   .queryUsers(paginationDtoStream)
+    //   .then((data) => lastValueFrom(data))
+    //   .then((value) => ({ users: value.usersAll }));
+    // return from(result);
+
     return this.usersService.queryUsers(paginationDtoStream);
   }
 }

@@ -13,13 +13,13 @@ export interface GetOneUserRequest {
   id: string;
 }
 
-export interface DeletetOneUserRequest {
+export interface DeleteOneUserRequest {
   id: string;
 }
 
 export interface UpdateUserRequest {
   id: string;
-  socialMediaUser: SocialMediaUser | undefined;
+  socialMedia: SocialMedia | undefined;
 }
 
 export interface PaginationUsersRequest {
@@ -38,10 +38,10 @@ export interface UserResponse {
   id: string;
   username: string;
   password: string;
-  socialMediaUser: SocialMediaUser | undefined;
+  socialMedia: SocialMedia | undefined;
 }
 
-export interface SocialMediaUser {
+export interface SocialMedia {
   twitterUri?: string | undefined;
   fbUri?: string | undefined;
 }
@@ -57,7 +57,7 @@ export interface DbServiceClient {
 
   updateDbUser(request: UpdateUserRequest): Observable<UserResponse>;
 
-  deleteDbUser(request: DeletetOneUserRequest): Observable<UserResponse>;
+  deleteDbUser(request: DeleteOneUserRequest): Observable<UserResponse>;
 
   paginationQueryUsers(request: Observable<PaginationUsersRequest>): Observable<UsersAllResponse>;
 }
@@ -71,7 +71,7 @@ export interface DbServiceController {
 
   updateDbUser(request: UpdateUserRequest): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
 
-  deleteDbUser(request: DeletetOneUserRequest): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
+  deleteDbUser(request: DeleteOneUserRequest): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
 
   paginationQueryUsers(request: Observable<PaginationUsersRequest>): Observable<UsersAllResponse>;
 }
