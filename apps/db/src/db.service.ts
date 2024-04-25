@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Observable, switchMap } from 'rxjs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { db } from '@app/common';
-import { Repository } from 'typeorm';
 import { Member } from './entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DbService {
@@ -54,24 +54,21 @@ export class DbService {
     return user;
   }
 
-  //  need to check
   queryUsersDb(
     paginationDtoStream: Observable<db.PaginationUsersRequest>,
   ): Observable<db.UsersAllResponse> {
-    return paginationDtoStream.pipe(
+    const stream = paginationDtoStream.pipe(
       switchMap(async (pagination: db.PaginationUsersRequest) => {
         const start = pagination.page * pagination.skip;
-        console.log(pagination.page);
         const someUsers = await this.userRepository
           .createQueryBuilder()
           .skip(start)
           .take(pagination.skip)
           .getMany();
-        console.log(someUsers);
+
         return { usersAll: someUsers };
       }),
     );
+    return stream;
   }
-
-
 }

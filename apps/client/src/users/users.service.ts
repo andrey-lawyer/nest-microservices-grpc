@@ -1,3 +1,7 @@
+import { concatMap, from, mergeMap, Observable, of, tap, toArray } from 'rxjs';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
+
 import {
   CreateUserDto,
   UpdateUserDto,
@@ -7,16 +11,14 @@ import {
   Users,
   PaginationDto,
 } from '@app/common';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { AUTH_SERVICE } from './constants';
-import { ClientGrpc } from '@nestjs/microservices';
-import { Observable, ReplaySubject } from 'rxjs';
+
+import { auth2_SERVICE } from './constants';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
   private usersService: UsersServiceClient;
 
-  constructor(@Inject(AUTH_SERVICE) private client: ClientGrpc) {}
+  constructor(@Inject(auth2_SERVICE) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.usersService =
@@ -43,22 +45,25 @@ export class UsersService implements OnModuleInit {
     return this.usersService.removeUser({ id });
   }
 
-  pagination() {
-    const users$ = new ReplaySubject<PaginationDto>();
-    // console.log(users$);
-
-    users$.next({ page: 0, skip: 1 });
-    users$.next({ page: 1, skip: 1 });
-    users$.next({ page: 2, skip: 1 });
-    users$.next({ page: 3, skip: 1 });
-
-    users$.complete();
+  pagination(): Observable<any> {
+    const pages: PaginationDto[] = [
+      { page: 0, skip: 1 },
+      { page: 1, skip: 1 },
+      { page: 2, skip: 1 },
+      { page: 3, skip: 1 },
+    ];
 
     let chunkNumber = 1;
-
-    this.usersService.queryUsers(users$).subscribe((users) => {
-      console.log('Chunk', chunkNumber, users);
-      chunkNumber += 1;
-    });
+    const usersFromStream = from(pages).pipe(
+      concatMap((pagination) =>
+        this.usersService
+          .queryUsers(of(pagination))
+          //  for giving every  chunk
+          .pipe(tap((users) => console.log('Chunk', chunkNumber++, users))),
+      ),
+      mergeMap((response) => response.users),
+      toArray(),
+    );
+    return usersFromStream;
   }
 }

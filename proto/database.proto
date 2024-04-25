@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package database;
+
+message User {
+  string id = 1;
+  string userEmail = 2;
+}
+
+message CreateUserDto {
+  string userEmail = 1;
+  string password = 2;
+}
+
+message LoginUserDto {
+  string userEmail = 1;
+  string password = 2;
+}
+
+
+service DbServiceUsers {
+  rpc SignUpUser (CreateUserDto) returns (User) {}
+  rpc Login (LoginUserDto) returns (User) {}
+}
+
+message Post {
+  string id = 1;
+  string text = 2;
+  User user = 3;
+}
+
+message Posts {
+  repeated Post posts = 1;
+}
+
+message FindOnePostDto {
+  string id = 1;
+}
+
+message CreatePostWithUser {
+  string id = 1;
+  string text = 2;
+  User user = 3;
+}
+
+message UpdatePostWithUserId {
+  string id = 1;
+  string text = 2;
+  string userId = 3;
+}
+
+
+message DeletePostWithUserId {
+  string id = 1;
+   string userId = 2;
+}
+
+message PaginationDto {
+  int32 page = 1;
+  int32 skip = 2;
+}
+
+message Empty {};
+
+service DbServicePosts {
+  rpc CreatePost (CreatePostWithUser) returns (Post) {}
+  rpc GetAllPosts (Empty) returns (Posts) {}
+  rpc GetOnePost (FindOnePostDto) returns (Post) {}
+  rpc UpdatePost (UpdatePostWithUserId ) returns (Post) {}
+  rpc DeletePost( DeletePostWithUserId ) returns (Post) {}
+  rpc GetPostsStream (stream PaginationDto) returns (stream Posts) {}
+}

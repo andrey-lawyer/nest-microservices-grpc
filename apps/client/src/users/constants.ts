@@ -1,1 +1,1 @@
-export const AUTH_SERVICE = 'auth';
+export const auth2_SERVICE = 'auth2';

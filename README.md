@@ -1,9 +1,9 @@
 nest new nest-monorepo-grpc
 cd nest-monorepo-grpc
-nest g app auth
+nest g app auth2
 
 npm run start:dev (default - client)
-npm run start:dev auth
+npm run start:dev auth2
 
 nest g resource users
 
@@ -13,22 +13,22 @@ npm i --save @grpc/grpc-js @grpc/proto-loader
 
 npm i -S ts-proto
 
-protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
+protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth2.proto
 
 protoc --plugin=/c/Users/UNICEF/AppData/Roaming/npm/protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/
-auth.proto
+auth2.proto
 
-protoc --plugin=protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth.proto
+protoc --plugin=protoc-gen-ts_proto.cmd --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/auth2.proto
 
 nest g lib common
 
-"auth": {
+"auth2": {
 "type": "application",
-"root": "apps/auth",
+"root": "apps/auth2",
 "entryFile": "main",
-"sourceRoot": "apps/auth/src",
+"sourceRoot": "apps/auth2/src",
 "compilerOptions": {
-"tsConfigPath": "apps/auth/tsconfig.app.json"
+"tsConfigPath": "apps/auth2/tsconfig.app.json"
 }
 },
 
@@ -43,6 +43,6 @@ nest g lib common
 
 nest g resource users
 
-npm run start:dev auth
+npm run start:dev auth2
 npm run start:dev client
 npm run start:dev db

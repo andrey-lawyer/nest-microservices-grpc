@@ -49,12 +49,6 @@ export class UsersController implements UsersServiceController {
   queryUsers(
     paginationDtoStream: Observable<PaginationDto>,
   ): Observable<Users> {
-    // const result = this.usersService
-    //   .queryUsers(paginationDtoStream)
-    //   .then((data) => lastValueFrom(data))
-    //   .then((value) => ({ users: value.usersAll }));
-    // return from(result);
-
     return this.usersService.queryUsers(paginationDtoStream);
   }
 }

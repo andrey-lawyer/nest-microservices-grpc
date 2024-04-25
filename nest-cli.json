@@ -24,13 +24,13 @@
         "watchAssets": true
       }
     },
-    "auth": {
+    "auth2": {
       "type": "application",
-      "root": "apps/auth",
+      "root": "apps/auth2",
       "entryFile": "src/main",
       "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/auth/tsconfig.app.json",
+        "tsConfigPath": "apps/auth2/tsconfig.app.json",
         "assets": [
           "proto/*.proto"
         ],
@@ -53,6 +53,32 @@
       "sourceRoot": "./",
       "compilerOptions": {
         "tsConfigPath": "apps/db/tsconfig.app.json",
+        "assets": [
+          "proto/*.proto"
+        ],
+        "watchAssets": true
+      }
+    },
+    "posts": {
+      "type": "application",
+      "root": "apps/posts",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
+      "compilerOptions": {
+        "tsConfigPath": "apps/posts/tsconfig.app.json",
+        "assets": [
+          "proto/*.proto"
+        ],
+        "watchAssets": true
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json",
         "assets": [
           "proto/*.proto"
         ],
