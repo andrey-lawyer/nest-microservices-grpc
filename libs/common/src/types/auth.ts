@@ -5,8 +5,9 @@ import { Observable } from "rxjs";
 export const protobufPackage = "auth";
 
 export interface User {
-  id: string;
-  userEmail: string;
+  id?: string | undefined;
+  userEmail?: string | undefined;
+  password?: string | undefined;
 }
 
 export interface CreateUserDto {
@@ -19,18 +20,22 @@ export interface LoginUserDto {
   password: string;
 }
 
+export interface Token {
+  token: string;
+}
+
 export const AUTH_PACKAGE_NAME = "auth";
 
 export interface AuthServiceClient {
   signUpUser(request: CreateUserDto): Observable<User>;
 
-  login(request: LoginUserDto): Observable<User>;
+  login(request: LoginUserDto): Observable<Token>;
 }
 
 export interface AuthServiceController {
   signUpUser(request: CreateUserDto): Promise<User> | Observable<User> | User;
 
-  login(request: LoginUserDto): Promise<User> | Observable<User> | User;
+  login(request: LoginUserDto): Promise<Token> | Observable<Token> | Token;
 }
 
 export function AuthServiceControllerMethods() {

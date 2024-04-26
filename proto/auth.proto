@@ -3,8 +3,9 @@ syntax = "proto3";
 package auth;
 
 message User {
-  string id = 1;
-  string userEmail = 2;
+  optional string id = 1;
+  optional string userEmail = 2;
+  optional string password = 3;
 }
 
 message CreateUserDto {
@@ -17,7 +18,11 @@ message LoginUserDto {
   string password = 2;
 }
 
+message Token {
+  string token =1 ;
+}
+
 service AuthService {
   rpc SignUpUser (CreateUserDto) returns (User) {}
-  rpc Login (LoginUserDto) returns (User) {}
+  rpc Login (LoginUserDto) returns (Token) {}
 }

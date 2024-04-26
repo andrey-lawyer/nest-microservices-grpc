@@ -5,8 +5,10 @@ import { Observable } from "rxjs";
 export const protobufPackage = "database";
 
 export interface User {
-  id: string;
-  userEmail: string;
+  id?: string | undefined;
+  userEmail?: string | undefined;
+  password?: string | undefined;
+  notFound?: boolean | undefined;
 }
 
 export interface CreateUserDto {
@@ -14,9 +16,8 @@ export interface CreateUserDto {
   password: string;
 }
 
-export interface LoginUserDto {
+export interface FindUserDto {
   userEmail: string;
-  password: string;
 }
 
 export interface Post {
@@ -63,18 +64,18 @@ export const DATABASE_PACKAGE_NAME = "database";
 export interface DbServiceUsersClient {
   signUpUser(request: CreateUserDto): Observable<User>;
 
-  login(request: LoginUserDto): Observable<User>;
+  findUser(request: FindUserDto): Observable<User>;
 }
 
 export interface DbServiceUsersController {
   signUpUser(request: CreateUserDto): Promise<User> | Observable<User> | User;
 
-  login(request: LoginUserDto): Promise<User> | Observable<User> | User;
+  findUser(request: FindUserDto): Promise<User> | Observable<User> | User;
 }
 
 export function DbServiceUsersControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["signUpUser", "login"];
+    const grpcMethods: string[] = ["signUpUser", "findUser"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("DbServiceUsers", method)(constructor.prototype[method], method, descriptor);

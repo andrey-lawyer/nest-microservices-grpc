@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { db } from '@app/common';
-import { Member } from './entities/user.entity';
+import { Member } from './entities/user2.entity';
 
 @Injectable()
 export class DbService {
@@ -17,6 +17,7 @@ export class DbService {
     createUserDto: db.CreateUserRequest,
   ): Promise<db.UserResponse> {
     const user = await this.userRepository.save(createUserDto);
+
     return user;
   }
 

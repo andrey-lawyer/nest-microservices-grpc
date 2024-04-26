@@ -3,8 +3,10 @@ syntax = "proto3";
 package database;
 
 message User {
-  string id = 1;
-  string userEmail = 2;
+  optional string id = 1;
+  optional string userEmail = 2;
+  optional string password = 3;
+  optional bool notFound = 4;
 }
 
 message CreateUserDto {
@@ -12,15 +14,15 @@ message CreateUserDto {
   string password = 2;
 }
 
-message LoginUserDto {
+
+message FindUserDto {
   string userEmail = 1;
-  string password = 2;
 }
 
 
 service DbServiceUsers {
   rpc SignUpUser (CreateUserDto) returns (User) {}
-  rpc Login (LoginUserDto) returns (User) {}
+  rpc FindUser (FindUserDto) returns (User) {}
 }
 
 message Post {

@@ -8,15 +8,11 @@ import { Observable } from 'rxjs';
 export class AuthController implements auth.AuthServiceController {
   constructor(private readonly authService: AuthService) {}
 
-  signUpUser(
-    createUserDto: auth.CreateUserDto,
-  ): auth.User | Promise<auth.User> | Observable<auth.User> {
+  signUpUser(createUserDto: auth.CreateUserDto): Observable<auth.User> {
     return this.authService.create(createUserDto);
   }
 
-  login(
-    loginUserDto: auth.LoginUserDto,
-  ): auth.User | Promise<auth.User> | Observable<auth.User> {
+  login(loginUserDto: auth.LoginUserDto): Observable<auth.Token> {
     return this.authService.login(loginUserDto);
   }
 }

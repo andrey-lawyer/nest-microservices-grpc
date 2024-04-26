@@ -1,19 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Post } from './post.entity';
 
 @Entity()
-export class Member {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  username: string;
+  userEmail: string;
 
   @Column()
   password: string;
 
-  @Column({ type: 'json', nullable: true })
-  socialMedia: {
-    twitterUri?: string;
-    fbUri?: string;
-  };
+  @OneToMany(() => Post, (posts) => posts.user, {
+    nullable: true,
+  })
+  posts: Post[];
 }
