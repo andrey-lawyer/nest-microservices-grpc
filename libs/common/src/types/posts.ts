@@ -5,8 +5,8 @@ import { Observable } from "rxjs";
 export const protobufPackage = "posts";
 
 export interface User {
-  id: string;
-  userEmail: string;
+  id?: string | undefined;
+  userEmail?: string | undefined;
 }
 
 export interface Post {
@@ -24,7 +24,6 @@ export interface FindOnePostDto {
 }
 
 export interface CreatePostWithUser {
-  id: string;
   text: string;
   user: User | undefined;
 }
@@ -59,7 +58,7 @@ export interface PostsServiceClient {
 
   updatePost(request: UpdatePostWithUserId): Observable<Post>;
 
-  deletePost(request: DeletePostWithUserId): Observable<Post>;
+  deletePost(request: DeletePostWithUserId): Observable<FindOnePostDto>;
 
   getPostsStream(request: Observable<PaginationDto>): Observable<Posts>;
 }
@@ -73,7 +72,7 @@ export interface PostsServiceController {
 
   updatePost(request: UpdatePostWithUserId): Promise<Post> | Observable<Post> | Post;
 
-  deletePost(request: DeletePostWithUserId): Promise<Post> | Observable<Post> | Post;
+  deletePost(request: DeletePostWithUserId): Promise<FindOnePostDto> | Observable<FindOnePostDto> | FindOnePostDto;
 
   getPostsStream(request: Observable<PaginationDto>): Observable<Posts>;
 }

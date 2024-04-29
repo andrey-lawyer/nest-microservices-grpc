@@ -5,8 +5,7 @@ import { join } from 'path';
 
 import { DbModule } from './db.module';
 
-// import { DB_PACKAGE_NAME } from '@app/common/types/db';
-import { db2 } from '@app/common';
+import { db } from '@app/common';
 
 async function bootstrap() {
   const logger = new Logger();
@@ -16,8 +15,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         protoPath: join(__dirname, '../database.proto'),
-        // package: DB_PACKAGE_NAME,
-        package: db2.DATABASE_PACKAGE_NAME,
+        package: db.DATABASE_PACKAGE_NAME,
         url: 'localhost:5002',
       },
     },

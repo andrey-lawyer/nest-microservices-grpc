@@ -35,20 +35,12 @@ export interface FindOnePostDto {
 }
 
 export interface CreatePostWithUser {
-  id: string;
   text: string;
   user: User | undefined;
 }
 
-export interface UpdatePostWithUserId {
+export interface DeletePostDto {
   id: string;
-  text: string;
-  userId: string;
-}
-
-export interface DeletePostWithUserId {
-  id: string;
-  userId: string;
 }
 
 export interface PaginationDto {
@@ -97,9 +89,9 @@ export interface DbServicePostsClient {
 
   getOnePost(request: FindOnePostDto): Observable<Post>;
 
-  updatePost(request: UpdatePostWithUserId): Observable<Post>;
+  updatePost(request: Post): Observable<Post>;
 
-  deletePost(request: DeletePostWithUserId): Observable<Post>;
+  deletePost(request: DeletePostDto): Observable<DeletePostDto>;
 
   getPostsStream(request: Observable<PaginationDto>): Observable<Posts>;
 }
@@ -111,9 +103,9 @@ export interface DbServicePostsController {
 
   getOnePost(request: FindOnePostDto): Promise<Post> | Observable<Post> | Post;
 
-  updatePost(request: UpdatePostWithUserId): Promise<Post> | Observable<Post> | Post;
+  updatePost(request: Post): Promise<Post> | Observable<Post> | Post;
 
-  deletePost(request: DeletePostWithUserId): Promise<Post> | Observable<Post> | Post;
+  deletePost(request: DeletePostDto): Promise<DeletePostDto> | Observable<DeletePostDto> | DeletePostDto;
 
   getPostsStream(request: Observable<PaginationDto>): Observable<Posts>;
 }

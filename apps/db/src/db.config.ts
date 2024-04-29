@@ -1,5 +1,4 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Member } from './entities/user2.entity';
 import { User } from './entities/user.entity';
 import { Post } from './entities/post.entity';
 
@@ -13,7 +12,7 @@ const dbConfig: TypeOrmModuleOptions = {
   password: 'postgres',
   database: 'postgres',
   synchronize: true,
-  entities: [Member, User, Post],
+  entities: [User, Post],
 };
 
 export default dbConfig;

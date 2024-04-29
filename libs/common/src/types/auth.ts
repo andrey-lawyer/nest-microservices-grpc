@@ -7,7 +7,6 @@ export const protobufPackage = "auth";
 export interface User {
   id?: string | undefined;
   userEmail?: string | undefined;
-  password?: string | undefined;
 }
 
 export interface CreateUserDto {

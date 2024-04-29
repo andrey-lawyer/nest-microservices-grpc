@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
-import { db2 } from '@app/common';
+import { db } from '@app/common';
 
 @Injectable()
 export class UsersDbService {
@@ -11,18 +11,12 @@ export class UsersDbService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async signUp(createUserDto: db2.CreateUserDto): Promise<db2.User> {
-    console.log('createUserDto ' + createUserDto);
+  async signUp(createUserDto: db.CreateUserDto): Promise<db.User> {
     const user = await this.userRepository.save(createUserDto);
-    // const user = await this.userRepository.save({
-    //   email: 'andrey-222@ukr.net',
-    //   password: '123456789',
-    // });
-    // console.log(user);
     return user;
   }
 
-  async findOneUser(findUserDto: db2.FindUserDto): Promise<db2.User> {
+  async findOneUser(findUserDto: db.FindUserDto): Promise<db.User> {
     const user = await this.userRepository.findOneBy({
       userEmail: findUserDto.userEmail,
     });

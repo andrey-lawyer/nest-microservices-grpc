@@ -5,7 +5,6 @@ package auth;
 message User {
   optional string id = 1;
   optional string userEmail = 2;
-  optional string password = 3;
 }
 
 message CreateUserDto {

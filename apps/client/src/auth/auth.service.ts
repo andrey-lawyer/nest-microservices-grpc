@@ -1,11 +1,6 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
-import { ClientGrpc, RpcException } from '@nestjs/microservices';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 
 import { auth } from '@app/common';
 import { auth_SERVICE } from './constants';
@@ -23,24 +18,9 @@ export class AuthService implements OnModuleInit {
   }
 
   signUp(createUserDto: auth.CreateUserDto): Observable<auth.User> {
-    return this.usersService.signUpUser(createUserDto).pipe(
-      // catchError((error) => {
-      //   console.log(error);
-      //   const errorMessage = error.details || 'Unknown error';
-      //   console.error('Error from gRPC:', errorMessage);
-      //   throw new RpcException(errorMessage);
-      // }),
-      catchError((error) => throwError(() => new RpcException(error))),
-    );
-    // catchError((error) => {
-    //   if (error instanceof ConflictException) {
-    //     console.error('User already exists:', error.message);
-    //   } else {
-    //     console.error('Unexpected error:', error);
-    //   }
-    //   return throwError(() => error.message);
-    // }),
+    return this.usersService.signUpUser(createUserDto);
   }
+
   login(loginUserDto: auth.LoginUserDto): Observable<auth.Token> {
     return this.usersService.login(loginUserDto);
   }

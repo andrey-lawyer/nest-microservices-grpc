@@ -1,75 +1,34 @@
-import {
-  ConflictException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  OnModuleInit,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { catchError, from, Observable, of, switchMap, throwError } from 'rxjs';
-import * as bcrypt from 'bcrypt';
-import * as grpc from '@grpc/grpc-js'.
-
-import { auth, db2 } from '@app/common';
-import { DB_SERVICE } from './constants';
 import { JwtService } from '@nestjs/jwt';
-// import { FitRpcException } from './filters/rpcExceptionFilter';
+import * as bcrypt from 'bcrypt';
+import {
+  GrpcAlreadyExistsException,
+  GrpcUnauthenticatedException,
+} from 'nestjs-grpc-exceptions';
 
-export interface IRpcException {
-  message: string;
-  status: number;
-}
-class FitRpcException extends RpcException implements IRpcException {
-  constructor(message: string, statusCode: HttpStatus) {
-    super(message);
-    this.initStatusCode(statusCode);
-  }
-  public status: number;
-
-  private initStatusCode(statusCode) {
-    this.status = statusCode;
-  }
-}
+import { auth, db } from '@app/common';
+import { DB_SERVICE } from './constants';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
-  private dbService: db2.DbServiceUsersClient;
+  private dbService: db.DbServiceUsersClient;
   constructor(
     @Inject(DB_SERVICE) private client: ClientGrpc,
     private jwtService: JwtService,
   ) {}
   onModuleInit() {
-    this.dbService = this.client.getService<db2.DbServiceUsersClient>(
-      db2.DB_SERVICE_USERS_SERVICE_NAME,
+    this.dbService = this.client.getService<db.DbServiceUsersClient>(
+      db.DB_SERVICE_USERS_SERVICE_NAME,
     );
   }
 
-  create(createUserDto: auth.CreateUserDto): Observable<db2.User> {
+  create(createUserDto: auth.CreateUserDto): Observable<auth.User> {
     return this.dbService.findUser(createUserDto).pipe(
       switchMap((user) => {
         if (!user?.notFound) {
-          // return throwError(
-          //   () =>
-          //     new RpcException(new ConflictException('User already exists')),
-          // );
-          // throw new RpcException(new ConflictException('User already exists'));
-          // return throwError(
-          //   () =>
-          //     new RpcException({
-          //       statusCode: 409,
-          //       message: 'User already exists',
-          //     }),
-          // );
-          // throw new FitRpcException('User already exists', 409);
-          throw new FitRpcException(
-            'error',
-             409
-          );
-          // throw new RpcException({
-          //   code: 5,
-          //   message: 'User already exists',
-          // });
+          throw new GrpcAlreadyExistsException('User already exists');
         }
 
         return from(bcrypt.hash(createUserDto.password, 10)).pipe(
@@ -79,6 +38,12 @@ export class AuthService implements OnModuleInit {
               password: passwordHash,
             }),
           ),
+          switchMap((registeredUser) => {
+            return of({
+              userEmail: registeredUser.userEmail,
+              id: registeredUser.id,
+            });
+          }),
         );
       }),
       catchError((error) => {
@@ -88,20 +53,21 @@ export class AuthService implements OnModuleInit {
   }
 
   login(loginUserDto: auth.LoginUserDto): Observable<auth.Token> {
-    // return this.dbService.findUser(loginUserDto);
     return this.dbService.findUser(loginUserDto).pipe(
       switchMap((user) => {
-        if (!user) {
-          throw new UnauthorizedException('Invalid email');
+        if (user?.notFound) {
+          throw new GrpcUnauthenticatedException('Invalid email');
         }
 
-        return bcrypt.compare(loginUserDto.password, user.password).pipe(
+        return from(bcrypt.compare(loginUserDto.password, user.password)).pipe(
           switchMap((isPasswordMatched) => {
             if (!isPasswordMatched) {
-              throw new UnauthorizedException('Invalid password');
+              throw new GrpcUnauthenticatedException('Invalid password');
             }
-
-            const token = this.jwtService.sign({ id: user.id });
+            const token = this.jwtService.sign({
+              id: user.id,
+              userEmail: user.userEmail,
+            });
             return of({ token });
           }),
           catchError((error) => {
