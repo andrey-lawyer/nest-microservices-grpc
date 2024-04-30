@@ -12,7 +12,9 @@ export class PostsDbService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async savePostDb(createPost: db.CreatePostWithUser): Promise<db.Post> {
+  async savePostDb(
+    createPost: db.CreatePostWithUser | db.Post,
+  ): Promise<db.Post> {
     const post = await this.postRepository.save(createPost);
     return post;
   }
@@ -27,14 +29,14 @@ export class PostsDbService {
     return { posts };
   }
 
-  async findOnePost(id: string): Promise<db.Post | undefined> {
+  async findOnePost(id: string): Promise<db.Post | null> {
     const post = await this.postRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user')
       .where('post.id = :id', { id })
       .select(['post.id', 'post.text', 'user.id', 'user.userEmail'])
       .getOne();
-
+    if (!post) return { notFound: true };
     return post;
   }
 

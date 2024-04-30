@@ -16,9 +16,9 @@ export class UsersDbService {
     return user;
   }
 
-  async findOneUser(findUserDto: db.FindUserDto): Promise<db.User> {
+  async findOneUser({ userEmail }: db.FindUserDto): Promise<db.User> {
     const user = await this.userRepository.findOneBy({
-      userEmail: findUserDto.userEmail,
+      userEmail,
     });
     if (!user) return { notFound: true };
     return user;

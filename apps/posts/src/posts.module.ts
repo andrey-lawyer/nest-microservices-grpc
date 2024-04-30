@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { join } from 'path';
+import { APP_FILTER } from '@nestjs/core';
+import { GrpcServerExceptionFilter } from 'nestjs-grpc-exceptions';
+
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+
 import { DB_SERVICE } from './constants';
 import { db } from '@app/common';
-import { join } from 'path';
+
+import { AllExceptionsFilter } from './filters/rpc-exception.filter';
 
 @Module({
   imports: [
@@ -21,6 +27,16 @@ import { join } from 'path';
     ]),
   ],
   controllers: [PostsController],
-  providers: [PostsService],
+  providers: [
+    PostsService,
+    {
+      provide: APP_FILTER,
+      useClass: GrpcServerExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class PostsModule {}

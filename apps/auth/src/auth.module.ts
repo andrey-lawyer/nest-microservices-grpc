@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { GrpcServerExceptionFilter } from 'nestjs-grpc-exceptions';
+import { AllExceptionsFilter } from './filters/rpc-exception.filter';
 
 @Module({
   imports: [
@@ -46,6 +47,10 @@ import { GrpcServerExceptionFilter } from 'nestjs-grpc-exceptions';
     {
       provide: APP_FILTER,
       useClass: GrpcServerExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })

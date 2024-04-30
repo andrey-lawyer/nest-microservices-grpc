@@ -1,6 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { DB_SERVICE } from './constants';
 import { ClientGrpc } from '@nestjs/microservices';
+
+import { DB_SERVICE } from './constants';
 import { db, posts } from '@app/common';
 import {
   catchError,
@@ -35,9 +36,10 @@ export class PostsService implements OnModuleInit {
   }
 
   getOnePost(id: string): Observable<db.Post> {
+    console.log('id ' + id);
     return this.dbService.getOnePost({ id }).pipe(
       tap((post) => {
-        if (!post) {
+        if (post?.notFound) {
           throw new GrpcNotFoundException(
             `Post with id: ${id} does not exists`,
           );
@@ -50,10 +52,8 @@ export class PostsService implements OnModuleInit {
   }
 
   update(updateUserDto: posts.UpdatePostWithUserId): Observable<db.Post> {
-    console.log('updateUserDto' + JSON.stringify(updateUserDto));
     return this.dbService.getOnePost({ id: updateUserDto.id }).pipe(
       switchMap((post) => {
-        console.log(post.user);
         if (!post) {
           throw new GrpcNotFoundException(
             `Post with id: ${updateUserDto.id} does not exists`,

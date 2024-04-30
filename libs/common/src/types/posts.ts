@@ -10,9 +10,9 @@ export interface User {
 }
 
 export interface Post {
-  id: string;
-  text: string;
-  user: User | undefined;
+  id?: string | undefined;
+  text?: string | undefined;
+  user?: User | undefined;
 }
 
 export interface Posts {

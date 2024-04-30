@@ -21,9 +21,10 @@ export interface FindUserDto {
 }
 
 export interface Post {
-  id: string;
-  text: string;
-  user: User | undefined;
+  id?: string | undefined;
+  text?: string | undefined;
+  user?: User | undefined;
+  notFound?: boolean | undefined;
 }
 
 export interface Posts {

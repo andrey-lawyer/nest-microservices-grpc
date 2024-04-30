@@ -30,7 +30,10 @@ export class PostsController implements posts.PostsServiceController {
 
   deletePost(
     deletePost: posts.DeletePostWithUserId,
-  ): posts.Post | Promise<posts.Post> | Observable<posts.FindOnePostDto> {
+  ):
+    | posts.FindOnePostDto
+    | Promise<posts.FindOnePostDto>
+    | Observable<posts.FindOnePostDto> {
     return this.postsService.deleteOnePost(deletePost);
   }
 
