@@ -26,7 +26,7 @@ This Nest.js monorepo is comprised of four microservices. Each microservice inte
 1. **Clone the repo**
 
 ```bash
-git.dzencode.com/crm.31703/nest-monorepo-grpc
+github.com/andrey-lawyer/nest-microservices-grpc
 ```
 
 2. **Install dependencies** It's recommended to use npm:
